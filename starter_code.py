@@ -1,4 +1,7 @@
 # find_similar_talks_with_chatgpt.py
+import os
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 import pandas as pd
 from sentence_transformers import SentenceTransformer, util
 import openai
@@ -105,18 +108,22 @@ def find_similar_talks(search_term, top_k=3):
 
 # Example usage
 if __name__ == "__main__":
-    search_term = "Serious depression"
+    search_term = input("Enter a search term: ")
     similar_talks, chatgpt_response = find_similar_talks(search_term)
 
     if similar_talks:
         print(f"Top 3 most similar talks to '{search_term}':")
         for talk in similar_talks:
+            # Clean and truncate the text snippet
+            text_snippet = talk['talk'][:200].encode('ascii', 'ignore').decode()
+            # Clean the title as well
+            clean_title = talk['title'].encode('ascii', 'ignore').decode()
             print(
-                f"- Title: {talk['title']}, "
+                f"- Title: {clean_title}, "
                 f"Speaker: {talk['speaker']}, "
                 f"Year: {talk['year']}, "
                 f"Similarity: {talk['similarity']:.4f}, "
-                f"Text Snippet: {talk['talk'][:200].encode('ascii', 'ignore').decode()}"
+                f"Text Snippet: {text_snippet}"
             )
         print("\nChatGPT Response:")
         print(chatgpt_response)
