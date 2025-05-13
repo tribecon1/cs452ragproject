@@ -105,7 +105,7 @@ def find_similar_talks(search_term, top_k=3):
 
 # Example usage
 if __name__ == "__main__":
-    search_term = "How can I deal with serious depression"
+    search_term = "Serious depression"
     similar_talks, chatgpt_response = find_similar_talks(search_term)
 
     if similar_talks:
